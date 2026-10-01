@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
 import { Search, X, BookOpen } from 'lucide-react';
-import { Estudo, CATEGORIAS } from '../data/estudos';
+import { Study } from '../types/study';
 import { StudyCard } from './StudyCard';
 
 interface StudyGridProps {
-  estudos: Estudo[];
+  studies: Study[];
   searchQuery: string;
   onSearchChange: (query: string) => void;
   selectedCategory: string;
   onCategoryChange: (category: string) => void;
-  onSelectEstudo: (id: string) => void;
+  onSelectStudy: (id: string) => void;
 }
 
-// Utilitário para normalizar texto (sem diferenciar maiúsculas ou acentos)
+// Normaliza texto para busca sem distinção de acentos ou maiúsculas
 const normalizeText = (text: string): string => {
   return text
     .toLowerCase()
@@ -21,65 +21,71 @@ const normalizeText = (text: string): string => {
 };
 
 export const StudyGrid: React.FC<StudyGridProps> = ({
-  estudos,
+  studies,
   searchQuery,
   onSearchChange,
   selectedCategory,
   onCategoryChange,
-  onSelectEstudo,
+  onSelectStudy,
 }) => {
-  const filteredEstudos = useMemo(() => {
+  // Extrai somente as categorias que realmente existem em pelo menos um estudo
+  const availableCategories = useMemo(() => {
+    const cats = new Set<string>();
+    studies.forEach((s) => {
+      if (s.category && s.category.trim()) {
+        cats.add(s.category.trim());
+      }
+    });
+    return Array.from(cats);
+  }, [studies]);
+
+  // Busca apenas nos campos reais existentes
+  const filteredStudies = useMemo(() => {
     const q = normalizeText(searchQuery.trim());
 
-    return estudos.filter((estudo) => {
-      // Filtro de Categoria
-      const matchesCategory =
-        selectedCategory === 'Todos' ||
-        normalizeText(estudo.categoria) === normalizeText(selectedCategory);
+    return studies.filter((study) => {
+      // Filtro de categoria (se houver categoria selecionada e categorias disponíveis)
+      if (selectedCategory && selectedCategory !== 'Todos') {
+        if (!study.category || normalizeText(study.category) !== normalizeText(selectedCategory)) {
+          return false;
+        }
+      }
 
-      if (!matchesCategory) return false;
       if (!q) return true;
 
-      // Busca abrangente: título, descrição, subtítulo, assuntos, palavras-chave, referências
-      const title = normalizeText(estudo.titulo);
-      const desc = normalizeText(estudo.descricao);
-      const subtitulo = estudo.subtitulo ? normalizeText(estudo.subtitulo) : '';
-      const autor = normalizeText(estudo.autor);
-      const assuntos = estudo.assuntos.map(normalizeText).join(' ');
-      const palavras = estudo.palavrasChave.map(normalizeText).join(' ');
-      const referencias = estudo.referencias.map(normalizeText).join(' ');
+      // Busca apenas em: título, autor e, quando existirem, categoria, descrição e referências
+      const title = normalizeText(study.title);
+      const author = normalizeText(study.author);
+      const category = study.category ? normalizeText(study.category) : '';
+      const description = study.description ? normalizeText(study.description) : '';
+      const refs = study.bibleReferences ? study.bibleReferences.map(normalizeText).join(' ') : '';
 
       return (
         title.includes(q) ||
-        desc.includes(q) ||
-        subtitulo.includes(q) ||
-        autor.includes(q) ||
-        assuntos.includes(q) ||
-        palavras.includes(q) ||
-        referencias.includes(q)
+        author.includes(q) ||
+        category.includes(q) ||
+        description.includes(q) ||
+        refs.includes(q)
       );
     });
-  }, [estudos, searchQuery, selectedCategory]);
+  }, [studies, searchQuery, selectedCategory]);
 
   return (
-    <section id="secao-estudos" className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20 bg-[var(--bg-page)]">
+    <section id="secao-estudos" className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 bg-[var(--bg-page)]">
       
-      {/* Cabeçalho da Seção idêntico à referência visual */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-[var(--border)]">
+      {/* Cabeçalho da Seção */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-6 border-b border-[var(--border)]">
         <div>
           <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[var(--primary)] mb-2 block select-none">
             N O S S O S &nbsp; E S T U D O S
           </span>
-          <h2 className="title-section font-extrabold text-[var(--primary-dark)] tracking-tight leading-snug mb-2">
-            A Palavra de Deus para a nossa geração
+          <h2 className="title-section font-extrabold text-[var(--primary-dark)] tracking-tight leading-snug">
+            Estudos Bíblicos
           </h2>
-          <p className="text-xs sm:text-sm text-[var(--text-muted)] max-w-lg leading-relaxed">
-            Aqui você encontra todos os estudos realizados pelo ministério de jovens. Aproveite e aprofunde seu relacionamento com Deus!
-          </p>
         </div>
 
-        {/* Busca por estudo (somente se houver estudos cadastrados) */}
-        {estudos.length > 0 && (
+        {/* Busca (procura apenas nos campos reais) */}
+        {studies.length > 0 && (
           <div className="w-full sm:w-72 md:w-64 relative shrink-0">
             <div className="absolute left-3.5 top-2.5 pointer-events-none text-[var(--text-muted)]">
               <Search className="w-4 h-4" />
@@ -105,48 +111,48 @@ export const StudyGrid: React.FC<StudyGridProps> = ({
         )}
       </div>
 
-      {/* Pílulas de filtro por categoria */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-8 no-scrollbar" role="tablist" aria-label="Filtro de categorias">
-        {CATEGORIAS.map((cat) => {
-          const isSelected = selectedCategory === cat;
-          return (
-            <button
-              key={cat}
-              onClick={() => onCategoryChange(cat)}
-              role="tab"
-              aria-selected={isSelected}
-              className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold shrink-0 transition-all min-h-[38px] flex items-center ${
-                isSelected
-                  ? 'bg-[var(--primary)] text-white font-bold shadow-2xs'
-                  : 'bg-[var(--bg-surface)] text-[var(--text-muted)] hover:bg-[var(--primary-light)] hover:text-[var(--primary-dark)] border border-[var(--border)]'
-              }`}
-            >
-              {cat}
-            </button>
-          );
-        })}
-
-        {(searchQuery || selectedCategory !== 'Todos') && (
+      {/* Filtros de categoria: Mostra SÓ as categorias que existirem em algum estudo. Enquanto nenhuma tiver, ESCONDE os filtros. */}
+      {availableCategories.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-8 no-scrollbar" role="tablist" aria-label="Filtro de categorias">
           <button
-            onClick={() => {
-              onSearchChange('');
-              onCategoryChange('Todos');
-            }}
-            className="text-xs font-semibold text-[var(--primary)] hover:underline ml-2 shrink-0 py-1"
+            onClick={() => onCategoryChange('Todos')}
+            className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold shrink-0 transition-all min-h-[38px] flex items-center ${
+              selectedCategory === 'Todos'
+                ? 'bg-[var(--primary)] text-white font-bold'
+                : 'bg-[var(--bg-surface)] text-[var(--text-muted)] hover:bg-[var(--primary-light)] border border-[var(--border)]'
+            }`}
           >
-            Limpar filtros
+            Todos
           </button>
-        )}
-      </div>
+          {availableCategories.map((cat) => {
+            const isSelected = selectedCategory === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => onCategoryChange(cat)}
+                role="tab"
+                aria-selected={isSelected}
+                className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold shrink-0 transition-all min-h-[38px] flex items-center ${
+                  isSelected
+                    ? 'bg-[var(--primary)] text-white font-bold'
+                    : 'bg-[var(--bg-surface)] text-[var(--text-muted)] hover:bg-[var(--primary-light)] border border-[var(--border)]'
+                }`}
+              >
+                {cat}
+              </button>
+            );
+          })}
+        </div>
+      )}
 
-      {/* Grade de Estudos: 1 coluna no celular, 2 no tablet, 3 no desktop */}
-      {filteredEstudos.length > 0 ? (
+      {/* Grade com os 6 estudos */}
+      {filteredStudies.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredEstudos.map((estudo) => (
+          {filteredStudies.map((study) => (
             <StudyCard
-              key={estudo.id}
-              estudo={estudo}
-              onSelectEstudo={onSelectEstudo}
+              key={study.id}
+              study={study}
+              onSelectStudy={onSelectStudy}
             />
           ))}
         </div>
@@ -160,15 +166,17 @@ export const StudyGrid: React.FC<StudyGridProps> = ({
           <p className="text-xs sm:text-sm text-[var(--text-muted)] leading-relaxed mb-4">
             Experimente buscar outro termo ou remover os filtros.
           </p>
-          <button
-            onClick={() => {
-              onSearchChange('');
-              onCategoryChange('Todos');
-            }}
-            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[var(--primary)] hover:underline"
-          >
-            <span>Ver todos os estudos</span>
-          </button>
+          {(searchQuery || (selectedCategory && selectedCategory !== 'Todos')) && (
+            <button
+              onClick={() => {
+                onSearchChange('');
+                onCategoryChange('Todos');
+              }}
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[var(--primary)] hover:underline"
+            >
+              <span>Ver todos os estudos</span>
+            </button>
+          )}
         </div>
       )}
 

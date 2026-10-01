@@ -9,12 +9,11 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Menu com somente as páginas que realmente possuem conteúdo fornecido
+  // Somente as páginas com conteúdo real oficial fornecido
   const navLinks = [
     { id: 'inicio', label: 'Início' },
     { id: 'estudos', label: 'Estudos' },
     { id: 'sobre', label: 'Sobre' },
-    { id: 'contato', label: 'Contato' },
   ];
 
   const handleLinkClick = (tabId: string) => {
@@ -37,7 +36,6 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
             alt="Jovens Correndo para Deus"
             className="h-10 sm:h-12 w-auto object-contain"
             onError={(e) => {
-              // Fallback to png if svg fails
               const target = e.target as HTMLImageElement;
               if (!target.src.endsWith('/logo.png')) {
                 target.src = '/logo.png';
