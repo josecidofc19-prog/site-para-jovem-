@@ -1,54 +1,49 @@
 import React from 'react';
-import { ArrowRight, BookOpen, HeartHandshake } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface HeroProps {
   onExploreStudies: () => void;
-  onAbout: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onExploreStudies, onAbout }) => {
+export const Hero: React.FC<HeroProps> = ({ onExploreStudies }) => {
   return (
     <section 
-      aria-labelledby="hero-main-title"
-      className="bg-[var(--bg-hero)] border-b border-[var(--border)] pt-16 pb-20 sm:pt-24 sm:pb-28 text-center transition-colors"
+      aria-labelledby="hero-title"
+      className="bg-[var(--bg-hero)] border-b border-[var(--border)] pt-16 pb-20 sm:pt-22 sm:pb-28 text-center transition-colors relative overflow-hidden"
     >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 relative z-10">
         
-        {/* Pré-título: CORRENDO PARA DEUS */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--primary-light)] text-[var(--primary-dark)] text-xs font-bold tracking-wider uppercase mb-5">
-          <span>✝</span>
-          <span>CORRENDO PARA DEUS</span>
+        {/* Kicker superior conforme a referência */}
+        <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.28em] text-[var(--primary)] mb-2 block select-none">
+          B E M - V I N D O &nbsp; A O
+        </span>
+
+        {/* Destaque visual para "Jovens" e "CORRENDO PARA DEUS" */}
+        <div className="my-2 select-none">
+          <span className="font-script text-6xl sm:text-8xl md:text-9xl text-[var(--primary-dark)] font-bold leading-none block -mb-3 sm:-mb-5">
+            Jovens
+          </span>
+          <h1 
+            id="hero-title"
+            className="text-xl sm:text-2xl md:text-3xl font-extrabold text-[var(--primary-dark)] tracking-[0.08em] uppercase"
+          >
+            CORRENDO PARA DEUS
+          </h1>
         </div>
 
-        {/* Título principal fluido */}
-        <h1 
-          id="hero-main-title"
-          className="title-hero font-extrabold text-[var(--primary-dark)] tracking-tight mb-4"
-        >
-          Estudos para crescer na fé
-        </h1>
-
-        {/* Subtexto oficial */}
-        <p className="text-base sm:text-lg text-[var(--text-muted)] max-w-2xl mx-auto leading-relaxed mb-8">
-          Conteúdos bíblicos para conhecer a Palavra de Deus, fortalecer a fé e crescer no relacionamento com Cristo.
+        {/* Texto de apoio da referência visual */}
+        <p className="text-sm sm:text-base text-[var(--text-muted)] max-w-lg mx-auto leading-relaxed mt-5 mb-8 font-medium">
+          Estudos que fortalecem a sua fé, te aproximam de Deus e te preparam para o propósito que Ele tem para você.
         </p>
 
-        {/* Botões de Ação: Explorar estudos → e Conheça o projeto */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 max-w-md mx-auto">
+        {/* Botão azul principal "Ver estudos" */}
+        <div>
           <button
             onClick={onExploreStudies}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white font-bold py-3.5 px-7 rounded-full text-sm sm:text-base shadow-xs hover:shadow transition-all min-h-[44px]"
+            className="inline-flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white font-bold text-sm sm:text-base px-7 py-3 rounded-full shadow-xs hover:shadow transition-all min-h-[44px] group"
           >
-            <span>Explorar estudos</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={onAbout}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[var(--bg-page)] hover:bg-[var(--bg-surface)] text-[var(--primary-dark)] font-bold py-3.5 px-6 rounded-full text-sm sm:text-base border border-[var(--border)] shadow-xs transition-colors min-h-[44px]"
-          >
-            <HeartHandshake className="w-4 h-4 text-[var(--primary)]" />
-            <span>Conheça o projeto</span>
+            <span>Ver estudos</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
           </button>
         </div>
 

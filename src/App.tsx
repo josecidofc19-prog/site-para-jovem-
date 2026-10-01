@@ -168,6 +168,7 @@ export const App: React.FC = () => {
             estudo={currentEstudo}
             estudoAnterior={estudoAnterior}
             proximoEstudo={proximoEstudo}
+            totalEstudos={sortedStudies.length}
             onNavigateHome={() => handleNavigate('estudos')}
             onSelectEstudo={(id) => handleNavigate('estudo', id)}
           />
@@ -196,14 +197,13 @@ export const App: React.FC = () => {
         {(currentTab === 'inicio' || currentTab === 'estudos') && (
           <div>
             
-            {/* 2. Hero (Fundo azul muito claro #F3F8FE, títulos fluidos, botões) */}
+            {/* 2. Hero (Fundo azul muito claro, conforme a referência visual) */}
             {currentTab === 'inicio' && (
               <Hero
                 onExploreStudies={() => {
                   const el = document.getElementById('secao-estudos');
                   el?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                onAbout={() => handleNavigate('sobre')}
               />
             )}
 

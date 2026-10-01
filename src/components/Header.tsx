@@ -9,10 +9,10 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Menu com somente as páginas que realmente possuem conteúdo fornecido
   const navLinks = [
     { id: 'inicio', label: 'Início' },
     { id: 'estudos', label: 'Estudos' },
-    { id: 'categorias', label: 'Categorias' },
     { id: 'sobre', label: 'Sobre' },
     { id: 'contato', label: 'Contato' },
   ];
@@ -26,43 +26,39 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
     <header className="sticky top-0 z-40 bg-[var(--bg-page)] border-b border-[var(--border)] transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
         
-        {/* Brand: Símbolo cristão minimalista (cruz fina) + "CORRENDO PARA DEUS" */}
+        {/* Logo "Jovens Correndo para Deus" */}
         <button
           onClick={() => handleLinkClick('inicio')}
-          className="group flex items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] rounded-lg py-1 px-1"
-          aria-label="Ir para a página inicial - Correndo para Deus"
+          className="group flex items-center gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] rounded-lg py-1 px-1"
+          aria-label="Ir para a página inicial - Jovens Correndo para Deus"
         >
-          {/* Cruz fina minimalista */}
-          <div className="w-8 h-8 rounded-lg bg-[var(--bg-hero)] text-[var(--primary)] border border-[var(--border)] flex items-center justify-center shrink-0 group-hover:bg-[var(--primary-light)] transition-colors">
-            <svg width="18" height="22" viewBox="0 0 18 22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <line x1="9" y1="2" x2="9" y2="20" />
-              <line x1="3" y1="7" x2="15" y2="7" />
-            </svg>
-          </div>
-
-          <div className="flex flex-col">
-            <span className="text-sm sm:text-base font-extrabold tracking-wider text-[var(--primary-dark)] uppercase">
-              CORRENDO PARA DEUS
-            </span>
-            <span className="text-[11px] font-medium text-[var(--text-muted)]">
-              AD. Ministério Correndo para Deus
-            </span>
-          </div>
+          <img
+            src="/logo.svg"
+            alt="Jovens Correndo para Deus"
+            className="h-10 sm:h-12 w-auto object-contain"
+            onError={(e) => {
+              // Fallback to png if svg fails
+              const target = e.target as HTMLImageElement;
+              if (!target.src.endsWith('/logo.png')) {
+                target.src = '/logo.png';
+              }
+            }}
+          />
         </button>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center gap-6">
-          <nav className="flex items-center gap-5" aria-label="Navegação principal">
+        <div className="hidden md:flex items-center gap-7">
+          <nav className="flex items-center gap-6" aria-label="Navegação principal">
             {navLinks.map((link) => {
               const isActive = currentTab === link.id || (link.id === 'estudos' && currentTab === 'estudo');
               return (
                 <button
                   key={link.id}
                   onClick={() => handleLinkClick(link.id)}
-                  className={`relative text-sm font-semibold transition-colors py-1.5 min-h-[44px] flex items-center ${
+                  className={`relative text-sm transition-colors py-1.5 min-h-[44px] flex items-center ${
                     isActive
                       ? 'text-[var(--primary)] font-bold'
-                      : 'text-[var(--text-muted)] hover:text-[var(--primary)]'
+                      : 'text-[var(--text-muted)] hover:text-[var(--primary)] font-medium'
                   }`}
                 >
                   <span>{link.label}</span>
@@ -77,12 +73,12 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
             })}
           </nav>
 
-          {/* CTA: Explorar estudos */}
+          {/* CTA: Ver estudos */}
           <button
             onClick={() => handleLinkClick('estudos')}
-            className="inline-flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-full shadow-xs transition-colors min-h-[44px]"
+            className="inline-flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-full shadow-xs transition-colors min-h-[44px]"
           >
-            <span>Explorar estudos</span>
+            <span>Ver estudos</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -127,9 +123,9 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
           <div className="pt-2">
             <button
               onClick={() => handleLinkClick('estudos')}
-              className="w-full inline-flex items-center justify-center gap-2 bg-[var(--primary)] text-white text-sm font-bold py-3 rounded-lg min-h-[44px]"
+              className="w-full inline-flex items-center justify-center gap-2 bg-[var(--primary)] text-white text-sm font-bold py-3 rounded-full min-h-[44px]"
             >
-              <span>Explorar estudos</span>
+              <span>Ver estudos</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
