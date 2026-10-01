@@ -57,7 +57,7 @@ export const StudyGrid: React.FC<StudyGridProps> = ({
 
       // Busca apenas em: título, autor e, quando existirem, categoria, descrição e referências
       const title = normalizeText(study.title);
-      const author = normalizeText(study.author);
+      const author = study.author ? normalizeText(study.author) : '';
       const category = study.category ? normalizeText(study.category) : '';
       const description = study.description ? normalizeText(study.description) : '';
       const refs = study.bibleReferences ? study.bibleReferences.map(normalizeText).join(' ') : '';
