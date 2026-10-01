@@ -1,0 +1,6 @@
+{
+  "name": "Correndo para Deus",
+  "description": "Conteúdos bíblicos para conhecer a Palavra de Deus, fortalecer a fé e crescer no relacionamento com Cristo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

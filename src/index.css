@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-brand-primary: #13467B;
+    --color-brand-navy: #0B2545;
+    --color-brand-accent: #2563EB;
+    --color-brand-sky: #EBF4FD;
+    --color-brand-light: #F4F8FD;
+    --color-brand-border: #DCE8F6;
+    --font-script: 'Caveat', cursive;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: #1E293B;
+    background-color: #FFFFFF;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Smooth scroll */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+/* Subtle watercolor/wash hero background matching reference image */
+.bg-hero-wash {
+  background: 
+    radial-gradient(ellipse 90% 60% at 90% -10%, rgba(147, 197, 253, 0.45) 0%, rgba(219, 234, 254, 0.25) 45%, transparent 75%),
+    radial-gradient(ellipse 70% 50% at 10% 20%, rgba(191, 219, 254, 0.35) 0%, rgba(239, 246, 255, 0.5) 50%, transparent 80%),
+    linear-gradient(180deg, #F8FAFD 0%, #FFFFFF 100%);
+}
+
+.bg-hero-artistic {
+  background-image: 
+    radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.18) 0%, transparent 40%),
+    radial-gradient(circle at 0% 40%, rgba(96, 165, 250, 0.12) 0%, transparent 35%),
+    linear-gradient(180deg, #F1F6FC 0%, #FFFFFF 100%);
+}
+
+/* Custom scrollbar for PDF reader and search results */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
