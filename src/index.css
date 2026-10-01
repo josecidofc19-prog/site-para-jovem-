@@ -1,61 +1,89 @@
 @import "tailwindcss";
 
+:root {
+  --bg-page: #FFFFFF;
+  --bg-hero: #F3F8FE; /* Azul muito claro de acolhimento */
+  --bg-surface: #F8FAFD;
+  --primary: #2B5F9E; /* Azul de identidade */
+  --primary-dark: #0F2B5B; /* Azul escuro para textos de títulos e rodapé */
+  --primary-light: #DCEBFA; /* Azul claro para chips e seletores */
+  --text-main: #1B2A47;
+  --text-muted: #566683;
+  --border: #D5E3F5;
+  --error: #B3261E;
+  
+  --font-family: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --shadow-card: 0 4px 12px rgba(15, 43, 91, 0.05);
+}
+
 @layer base {
-  :root {
-    --color-brand-primary: #13467B;
-    --color-brand-navy: #0B2545;
-    --color-brand-accent: #2563EB;
-    --color-brand-sky: #EBF4FD;
-    --color-brand-light: #F4F8FD;
-    --color-brand-border: #DCE8F6;
-    --font-script: 'Caveat', cursive;
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  html {
+    font-family: var(--font-family);
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    scroll-behavior: smooth;
   }
 
   body {
-    font-family: var(--font-sans);
-    color: #1E293B;
-    background-color: #FFFFFF;
+    font-family: var(--font-family);
+    background-color: var(--bg-page);
+    color: var(--text-main);
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-size: 16px;
+    line-height: 1.6;
   }
 
-  /* Smooth scroll */
-  html {
-    scroll-behavior: smooth;
+  /* Accessible keyboard focus visible */
+  :focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+  }
+
+  /* Respect prefers-reduced-motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-.font-script {
-  font-family: var(--font-script);
+/* Fluid responsive titles */
+.title-hero {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  line-height: 1.15;
 }
 
-/* Subtle watercolor/wash hero background matching reference image */
-.bg-hero-wash {
-  background: 
-    radial-gradient(ellipse 90% 60% at 90% -10%, rgba(147, 197, 253, 0.45) 0%, rgba(219, 234, 254, 0.25) 45%, transparent 75%),
-    radial-gradient(ellipse 70% 50% at 10% 20%, rgba(191, 219, 254, 0.35) 0%, rgba(239, 246, 255, 0.5) 50%, transparent 80%),
-    linear-gradient(180deg, #F8FAFD 0%, #FFFFFF 100%);
+.title-section {
+  font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+  line-height: 1.25;
 }
 
-.bg-hero-artistic {
-  background-image: 
-    radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.18) 0%, transparent 40%),
-    radial-gradient(circle at 0% 40%, rgba(96, 165, 250, 0.12) 0%, transparent 35%),
-    linear-gradient(180deg, #F1F6FC 0%, #FFFFFF 100%);
+.title-card {
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
+  line-height: 1.35;
 }
 
-/* Custom scrollbar for PDF reader and search results */
+/* Card shadow token */
+.card-shadow {
+  box-shadow: var(--shadow-card);
+}
+
+/* Scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F1F5F9;
+  background: var(--bg-surface);
 }
 ::-webkit-scrollbar-thumb {
-  background: #CBD5E1;
+  background: #CBDDF2;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #94A3B8;
+  background: #A6C5EA;
 }

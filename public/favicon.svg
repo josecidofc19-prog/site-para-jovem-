@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="16" fill="#283A8F"/>
+  <!-- Cross in yellow and white -->
+  <path d="M32 10V54" stroke="#FFFF00" stroke-width="6" stroke-linecap="round"/>
+  <path d="M18 24H46" stroke="#FFFF00" stroke-width="6" stroke-linecap="round"/>
+  <!-- Bible / Book outline -->
+  <path d="M16 46C22 43 28 44 32 47C36 44 42 43 48 46" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"/>
+</svg>

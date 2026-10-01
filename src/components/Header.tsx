@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
-import { Menu, X, BookOpen } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 
 interface HeaderProps {
   currentTab: string;
-  onNavigate: (tab: string, category?: string) => void;
+  onNavigate: (tab: string, studyId?: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navLinks = [
-    { id: 'home', label: 'Início' },
-    { id: 'studies', label: 'Estudos' },
-    { id: 'categories', label: 'Categorias' },
-    { id: 'about', label: 'Nossa História' },
-    { id: 'contact', label: 'Contato' },
+    { id: 'inicio', label: 'Início' },
+    { id: 'estudos', label: 'Estudos' },
+    { id: 'categorias', label: 'Categorias' },
+    { id: 'sobre', label: 'Sobre' },
+    { id: 'contato', label: 'Contato' },
   ];
 
   const handleLinkClick = (tabId: string) => {
@@ -23,104 +23,114 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
   };
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 transition-shadow">
+    <header className="sticky top-0 z-40 bg-[var(--bg-page)] border-b border-[var(--border)] transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
         
-        {/* Brand Zone: ✝ Jovens CORRENDO PARA DEUS */}
+        {/* Brand: Símbolo cristão minimalista (cruz fina) + "CORRENDO PARA DEUS" */}
         <button
-          onClick={() => handleLinkClick('home')}
-          className="group flex items-center gap-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-lg p-1"
-          aria-label="Ir para o início - Correndo para Deus"
+          onClick={() => handleLinkClick('inicio')}
+          className="group flex items-center gap-3 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] rounded-lg py-1 px-1"
+          aria-label="Ir para a página inicial - Correndo para Deus"
         >
-          {/* Subtle stylized cross */}
-          <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-800 flex items-center justify-center font-bold text-lg border border-blue-100 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">
-            ✝
+          {/* Cruz fina minimalista */}
+          <div className="w-8 h-8 rounded-lg bg-[var(--bg-hero)] text-[var(--primary)] border border-[var(--border)] flex items-center justify-center shrink-0 group-hover:bg-[var(--primary-light)] transition-colors">
+            <svg width="18" height="22" viewBox="0 0 18 22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+              <line x1="9" y1="2" x2="9" y2="20" />
+              <line x1="3" y1="7" x2="15" y2="7" />
+            </svg>
           </div>
 
-          <div className="flex flex-col leading-none">
-            <span className="font-script text-2xl sm:text-3xl text-blue-900 group-hover:text-blue-700 transition-colors">
-              Jovens
-            </span>
-            <span className="text-[11px] sm:text-xs font-bold tracking-widest text-slate-800 uppercase">
+          <div className="flex flex-col">
+            <span className="text-sm sm:text-base font-extrabold tracking-wider text-[var(--primary-dark)] uppercase">
               CORRENDO PARA DEUS
+            </span>
+            <span className="text-[11px] font-medium text-[var(--text-muted)]">
+              AD. Ministério Correndo para Deus
             </span>
           </div>
         </button>
 
-        {/* Desktop Nav Zone */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium" aria-label="Navegação principal">
-          {navLinks.map((link) => {
-            const isActive = currentTab === link.id;
-            return (
-              <button
-                key={link.id}
-                onClick={() => handleLinkClick(link.id)}
-                className={`relative py-1 transition-colors ${
-                  isActive
-                    ? 'text-blue-800 font-semibold'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                {link.label}
-                {isActive && (
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-700 rounded-full" />
-                )}
-              </button>
-            );
-          })}
-        </nav>
+        {/* Desktop Navigation Links */}
+        <div className="hidden md:flex items-center gap-6">
+          <nav className="flex items-center gap-5" aria-label="Navegação principal">
+            {navLinks.map((link) => {
+              const isActive = currentTab === link.id || (link.id === 'estudos' && currentTab === 'estudo');
+              return (
+                <button
+                  key={link.id}
+                  onClick={() => handleLinkClick(link.id)}
+                  className={`relative text-sm font-semibold transition-colors py-1.5 min-h-[44px] flex items-center ${
+                    isActive
+                      ? 'text-[var(--primary)] font-bold'
+                      : 'text-[var(--text-muted)] hover:text-[var(--primary)]'
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  {isActive && (
+                    <span 
+                      aria-hidden="true"
+                      className="absolute bottom-1 left-0 right-0 h-0.5 bg-[var(--primary)] rounded-full"
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
 
-        {/* Action Zone: Explorar estudos */}
-        <div className="hidden md:flex items-center gap-4">
+          {/* CTA: Explorar estudos */}
           <button
-            onClick={() => handleLinkClick('studies')}
-            className="inline-flex items-center gap-2 bg-[#13467B] hover:bg-[#0E335A] text-white text-sm font-semibold px-4 py-2.5 rounded-full transition-all duration-200 shadow-sm hover:shadow active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-800"
+            onClick={() => handleLinkClick('estudos')}
+            className="inline-flex items-center gap-2 bg-[var(--primary)] hover:bg-[var(--primary-dark)] text-white text-xs sm:text-sm font-bold px-4 py-2.5 rounded-full shadow-xs transition-colors min-h-[44px]"
           >
-            <BookOpen className="w-4 h-4" />
             <span>Explorar estudos</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        {/* Mobile Burger Button */}
-        <div className="flex md:hidden items-center">
+        {/* Mobile Hamburger */}
+        <div className="flex md:hidden items-center gap-2">
           <button
-            type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700"
+            className="p-2.5 rounded-lg text-[var(--text-main)] hover:bg-[var(--bg-surface)] transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center border border-[var(--border)]"
             aria-expanded={mobileMenuOpen}
-            aria-label="Abrir menu de navegação"
+            aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu de navegação'}
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
+
       </div>
 
-      {/* Mobile Menu Drawer */}
+      {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-6 space-y-2 shadow-lg animate-in slide-in-from-top duration-200">
+        <div className="md:hidden border-t border-[var(--border)] bg-[var(--bg-page)] px-4 pt-3 pb-5 space-y-2 shadow-md">
           {navLinks.map((link) => {
-            const isActive = currentTab === link.id;
+            const isActive = currentTab === link.id || (link.id === 'estudos' && currentTab === 'estudo');
             return (
               <button
                 key={link.id}
                 onClick={() => handleLinkClick(link.id)}
-                className={`w-full text-left px-4 py-3 rounded-lg text-base font-medium transition-colors ${
+                className={`w-full text-left px-4 py-3 rounded-lg text-sm font-semibold transition-colors flex items-center justify-between min-h-[44px] ${
                   isActive
-                    ? 'bg-blue-50 text-blue-900 font-semibold'
-                    : 'text-slate-700 hover:bg-slate-50'
+                    ? 'bg-[var(--primary-light)] text-[var(--primary-dark)] font-bold'
+                    : 'text-[var(--text-main)] hover:bg-[var(--bg-surface)]'
                 }`}
               >
-                {link.label}
+                <span>{link.label}</span>
+                {isActive && (
+                  <span className="w-2 h-2 rounded-full bg-[var(--primary)]" />
+                )}
               </button>
             );
           })}
+
           <div className="pt-2">
             <button
-              onClick={() => handleLinkClick('studies')}
-              className="w-full flex items-center justify-center gap-2 bg-[#13467B] text-white py-3 rounded-xl font-medium text-sm shadow-sm"
+              onClick={() => handleLinkClick('estudos')}
+              className="w-full inline-flex items-center justify-center gap-2 bg-[var(--primary)] text-white text-sm font-bold py-3 rounded-lg min-h-[44px]"
             >
-              <BookOpen className="w-4 h-4" />
               <span>Explorar estudos</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>

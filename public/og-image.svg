@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#283A8F"/>
+  
+  <!-- Subtle geometric corner accents matching the study slides -->
+  <polygon points="1200,0 1200,320 880,0" fill="#1C2B6E" opacity="0.8"/>
+  <polygon points="1200,0 1200,160 1040,0" fill="#3D52B8" opacity="0.6"/>
+  <polygon points="0,630 0,450 180,630" fill="#1C2B6E" opacity="0.8"/>
+  
+  <!-- Header Cross & Badge -->
+  <g transform="translate(100, 100)">
+    <rect x="0" y="0" width="60" height="60" rx="14" fill="#FFFF00"/>
+    <path d="M30 14V46" stroke="#283A8F" stroke-width="5" stroke-linecap="round"/>
+    <path d="M18 26H42" stroke="#283A8F" stroke-width="5" stroke-linecap="round"/>
+    <text x="80" y="40" fill="#FFFF00" font-family="Montserrat, system-ui, sans-serif" font-size="24" font-weight="700" letter-spacing="4">AD. MINISTÉRIO</text>
+  </g>
+
+  <!-- Title -->
+  <text x="100" y="270" fill="#FFFF00" font-family="Montserrat, system-ui, sans-serif" font-size="76" font-weight="900" letter-spacing="2">
+    CORRENDO PARA DEUS
+  </text>
+
+  <!-- Tagline -->
+  <text x="100" y="345" fill="#FFFFFF" font-family="Montserrat, system-ui, sans-serif" font-size="34" font-weight="500">
+    Estudos bíblicos para crescer na fé
+  </text>
+
+  <line x1="100" y1="390" x2="1100" y2="390" stroke="#FFFF00" stroke-width="3" opacity="0.4"/>
+
+  <!-- Footer metadata -->
+  <text x="100" y="470" fill="#E2E8F0" font-family="Montserrat, system-ui, sans-serif" font-size="22" font-weight="400">
+    Fidelidade bíblica • Leituras completas • Sem interpretações da IA
+  </text>
+  <text x="100" y="520" fill="#FFFF00" font-family="Montserrat, system-ui, sans-serif" font-size="20" font-weight="600">
+    correndo-para-deus.ai.studio • @ad_correndoparadeus
+  </text>
+</svg>

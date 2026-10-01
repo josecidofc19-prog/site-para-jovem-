@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://correndo-para-deus.ai.studio/sitemap.xml
