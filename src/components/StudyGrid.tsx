@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
-import { Search, X, BookOpen } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { Study } from '../types/study';
 import { StudyCard } from './StudyCard';
+import { SearchBar } from './SearchBar';
+import { CategoryFilter } from './CategoryFilter';
 
 interface StudyGridProps {
   studies: Study[];
@@ -44,7 +46,7 @@ export const StudyGrid: React.FC<StudyGridProps> = ({
     const q = normalizeText(searchQuery.trim());
 
     return studies.filter((study) => {
-      // Filtro de categoria (se houver categoria selecionada e categorias disponíveis)
+      // Filtro de categoria
       if (selectedCategory && selectedCategory !== 'Todos') {
         if (!study.category || normalizeText(study.category) !== normalizeText(selectedCategory)) {
           return false;
@@ -84,66 +86,21 @@ export const StudyGrid: React.FC<StudyGridProps> = ({
           </h2>
         </div>
 
-        {/* Busca (procura apenas nos campos reais) */}
+        {/* Busca */}
         {studies.length > 0 && (
-          <div className="w-full sm:w-72 md:w-64 relative shrink-0">
-            <div className="absolute left-3.5 top-2.5 pointer-events-none text-[var(--text-muted)]">
-              <Search className="w-4 h-4" />
-            </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Buscar estudo..."
-              className="w-full pl-9 pr-8 py-2 bg-[var(--bg-surface)] border border-[var(--border)] rounded-full text-xs sm:text-sm text-[var(--text-main)] placeholder:text-[var(--text-muted)] outline-none focus:ring-2 focus:ring-[var(--primary-light)] focus:border-[var(--primary)] transition-all"
-              aria-label="Buscar estudo"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => onSearchChange('')}
-                className="absolute right-3 top-2.5 text-[var(--text-muted)] hover:text-[var(--text-main)]"
-                aria-label="Limpar busca"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+          <SearchBar
+            value={searchQuery}
+            onChange={onSearchChange}
+          />
         )}
       </div>
 
-      {/* Filtros de categoria: Mostra SÓ as categorias que existirem em algum estudo. Enquanto nenhuma tiver, ESCONDE os filtros. */}
-      {availableCategories.length > 0 && (
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-8 no-scrollbar" role="tablist" aria-label="Filtro de categorias">
-          <button
-            onClick={() => onCategoryChange('Todos')}
-            className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold shrink-0 transition-all min-h-[38px] flex items-center ${
-              selectedCategory === 'Todos'
-                ? 'bg-[var(--primary)] text-white font-bold'
-                : 'bg-[var(--bg-surface)] text-[var(--text-muted)] hover:bg-[var(--primary-light)] border border-[var(--border)]'
-            }`}
-          >
-            Todos
-          </button>
-          {availableCategories.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            return (
-              <button
-                key={cat}
-                onClick={() => onCategoryChange(cat)}
-                role="tab"
-                aria-selected={isSelected}
-                className={`px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold shrink-0 transition-all min-h-[38px] flex items-center ${
-                  isSelected
-                    ? 'bg-[var(--primary)] text-white font-bold'
-                    : 'bg-[var(--bg-surface)] text-[var(--text-muted)] hover:bg-[var(--primary-light)] border border-[var(--border)]'
-                }`}
-              >
-                {cat}
-              </button>
-            );
-          })}
-        </div>
-      )}
+      {/* Filtros de categoria (aparecem apenas se houver categorias cadastradas) */}
+      <CategoryFilter
+        categories={availableCategories}
+        selectedCategory={selectedCategory}
+        onSelectCategory={onCategoryChange}
+      />
 
       {/* Grade com os 6 estudos */}
       {filteredStudies.length > 0 ? (

@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { getPdfOriginalUrl } from '../utils/pdfOriginal';
 
-// Configura o worker do pdfjs de forma nativa para Vite e GitHub Pages
+// Configura o worker oficial do PDF.js
 pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 interface PdfViewerProps {
@@ -40,38 +40,45 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
 
   const pdfUrl = getPdfOriginalUrl(pdfFileName);
 
-  // Carrega o documento PDF original
+  // Carrega o documento PDF original através de fetch binário (100% confiável em iframes e Vite)
   useEffect(() => {
     let isCancelled = false;
     setLoading(true);
     setError(false);
     setCurrentPage(1);
 
-    const loadingTask = pdfjsLib.getDocument({
-      url: pdfUrl,
-      cMapUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/cmaps/',
-      cMapPacked: true,
-    });
+    const loadPdf = async () => {
+      try {
+        const response = await fetch(pdfUrl);
+        if (!response.ok) {
+          throw new Error(`Falha HTTP ${response.status} ao carregar PDF`);
+        }
+        const arrayBuffer = await response.arrayBuffer();
+        if (isCancelled) return;
 
-    loadingTask.promise
-      .then((doc) => {
+        const loadingTask = pdfjsLib.getDocument({
+          data: new Uint8Array(arrayBuffer),
+        });
+
+        const doc = await loadingTask.promise;
         if (!isCancelled) {
           setPdfDoc(doc);
           setNumPages(doc.numPages);
           setLoading(false);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         console.error('Erro ao carregar PDF:', err);
         if (!isCancelled) {
           setError(true);
           setLoading(false);
         }
-      });
+      }
+    };
+
+    loadPdf();
 
     return () => {
       isCancelled = true;
-      loadingTask.destroy();
     };
   }, [pdfUrl]);
 
@@ -81,7 +88,6 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
       if (!pdfDoc || !canvasRef.current || !containerRef.current) return;
 
       try {
-        // Cancela tarefa de renderização anterior se estiver em andamento
         if (renderTaskRef.current) {
           renderTaskRef.current.cancel();
           renderTaskRef.current = null;
@@ -92,18 +98,15 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        // Calcula a largura disponível no container para celular e desktop
         const containerWidth = containerRef.current.clientWidth || 800;
         const baseViewport = page.getViewport({ scale: 1.0 });
 
-        // Ajusta a escala para preencher a largura no celular com padding
         const horizontalPadding = window.innerWidth < 640 ? 16 : 32;
         const fitScale = (containerWidth - horizontalPadding) / baseViewport.width;
         const finalScale = fitScale * zoomScale;
 
         const viewport = page.getViewport({ scale: finalScale });
 
-        // Multiplicador para alta resolução em telas Retina/HD
         const outputScale = window.devicePixelRatio || 1;
         canvas.width = Math.floor(viewport.width * outputScale);
         canvas.height = Math.floor(viewport.height * outputScale);
@@ -131,14 +134,13 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
     [pdfDoc, zoomScale]
   );
 
-  // Re-renderiza quando a página ou o zoom mudam
   useEffect(() => {
     if (pdfDoc && !loading && !error) {
       renderPage(currentPage);
     }
   }, [currentPage, zoomScale, pdfDoc, loading, error, renderPage]);
 
-  // Atalhos de teclado (Setas Esquerda e Direita)
+  // Atalhos de teclado
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) {
@@ -158,7 +160,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [numPages]);
 
-  // Resize listener para manter largura total no celular
+  // Redimensionamento responsivo
   useEffect(() => {
     const handleResize = () => {
       if (pdfDoc && !loading && !error) {
@@ -170,7 +172,6 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, [currentPage, pdfDoc, loading, error, renderPage]);
 
-  // Tela cheia
   const toggleFullscreen = () => {
     if (!containerRef.current) return;
 
@@ -196,7 +197,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
         isFullscreen ? 'fixed inset-0 z-50 rounded-none bg-slate-900 border-none' : 'card-shadow my-8'
       }`}
     >
-      {/* Barra de Ferramentas Superior */}
+      {/* Barra de Ferramentas */}
       <div className="bg-[var(--primary-dark)] text-white px-3 sm:px-4 py-2.5 flex flex-wrap items-center justify-between gap-2 border-b border-white/10 select-none">
         
         {/* Navegação de Páginas */}
@@ -242,7 +243,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
           </button>
         </div>
 
-        {/* Ferramentas de Zoom, Miniaturas e Tela Cheia */}
+        {/* Ferramentas */}
         <div className="flex items-center gap-1 sm:gap-1.5">
           <button
             onClick={() => setShowThumbnails(!showThumbnails)}
@@ -302,7 +303,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
 
       </div>
 
-      {/* Conteúdo Principal com Miniaturas Laterais */}
+      {/* Conteúdo Principal com Miniaturas */}
       <div className="flex-1 flex overflow-hidden relative">
         
         {/* Painel de Miniaturas */}
@@ -328,10 +329,9 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
           </aside>
         )}
 
-        {/* Área de Visualização do Canvas */}
+        {/* Área de Visualização */}
         <div className="flex-1 overflow-auto flex items-center justify-center p-2 sm:p-6 min-h-[420px] sm:min-h-[580px] bg-slate-100">
           
-          {/* Estado: Carregando */}
           {loading && (
             <div className="flex flex-col items-center justify-center p-8 text-center text-[var(--primary-dark)]">
               <Loader2 className="w-10 h-10 animate-spin text-[var(--primary)] mb-3" />
@@ -344,7 +344,6 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
             </div>
           )}
 
-          {/* Estado: Erro */}
           {error && (
             <div className="flex flex-col items-center justify-center p-6 text-center max-w-md mx-auto bg-white rounded-xl border border-[var(--border)] card-shadow">
               <AlertCircle className="w-12 h-12 text-rose-500 mb-3" />
@@ -365,7 +364,6 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
             </div>
           )}
 
-          {/* Canvas da Página Real do PDF */}
           <canvas
             ref={canvasRef}
             className={`shadow-md bg-white rounded transition-opacity duration-150 ${
@@ -377,7 +375,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({ pdfFileName, title }) => {
 
       </div>
 
-      {/* Barra Inferior com Informações de Atalhos */}
+      {/* Barra Inferior */}
       <div className="bg-[var(--bg-page)] border-t border-[var(--border)] px-4 py-2 flex items-center justify-between text-xs text-[var(--text-muted)]">
         <span>Use as teclas ◀ e ▶ para avançar e voltar páginas</span>
         <a

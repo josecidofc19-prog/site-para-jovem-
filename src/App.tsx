@@ -5,7 +5,7 @@ import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { StudyGrid } from './components/StudyGrid';
 import { StudyDetails } from './components/StudyDetails';
-import { SobreView } from './components/SobreView';
+import { AboutView } from './components/AboutView';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
@@ -157,7 +157,7 @@ export const App: React.FC = () => {
 
         {/* PÁGINA SOBRE: Apenas texto oficial */}
         {currentTab === 'sobre' && (
-          <SobreView
+          <AboutView
             onExploreStudies={() => handleNavigate('estudos')}
           />
         )}
