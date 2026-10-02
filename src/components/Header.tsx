@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Menu, X, ArrowRight } from 'lucide-react';
+import { STUDIES } from '../data/studies';
 
 interface HeaderProps {
   currentTab: string;
@@ -9,13 +10,33 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Menu oficial completo restaurado
-  const navLinks = [
-    { id: 'inicio', label: 'Início' },
-    { id: 'estudos', label: 'Estudos' },
-    { id: 'sobre', label: 'Nossa História' },
-    { id: 'contato', label: 'Contato' },
-  ];
+  // Verifica se existem 2 ou mais categorias reais
+  const hasMultipleCategories = useMemo(() => {
+    const cats = new Set<string>();
+    STUDIES.forEach((s) => {
+      if (s.category && s.category.trim()) cats.add(s.category.trim());
+    });
+    return cats.size >= 2;
+  }, []);
+
+  // Menu oficial dinâmico respeitando a regra de categorias
+  const navLinks = useMemo(() => {
+    const links = [
+      { id: 'inicio', label: 'Início' },
+      { id: 'estudos', label: 'Estudos' },
+    ];
+
+    if (hasMultipleCategories) {
+      links.push({ id: 'categorias', label: 'Categorias' });
+    }
+
+    links.push(
+      { id: 'sobre', label: 'Nossa História' },
+      { id: 'contato', label: 'Contato' }
+    );
+
+    return links;
+  }, [hasMultipleCategories]);
 
   const handleLinkClick = (tabId: string) => {
     onNavigate(tabId);

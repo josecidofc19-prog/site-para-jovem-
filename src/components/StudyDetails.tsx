@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -10,8 +10,11 @@ import {
   BookOpen 
 } from 'lucide-react';
 import { Study } from '../types/study';
-import { PdfViewer } from './PdfViewer';
 import { getPdfOriginalUrl } from '../utils/pdfOriginal';
+
+const PdfViewer = lazy(() =>
+  import('./PdfViewer').then((mod) => ({ default: mod.PdfViewer }))
+);
 
 interface StudyDetailsProps {
   study: Study;
@@ -106,9 +109,20 @@ export const StudyDetails: React.FC<StudyDetailsProps> = ({
           </a>
         </div>
 
-        {/* 5. Leitor com as páginas reais do PDF */}
+        {/* 5. Leitor com as páginas reais do PDF (Carregamento sob demanda) */}
         <div className="mt-4 mb-6">
-          <PdfViewer pdfFileName={study.pdfFileName} title={study.title} />
+          <Suspense
+            fallback={
+              <div className="bg-[var(--bg-surface)] border border-[var(--border)] rounded-[14px] p-12 text-center my-8 card-shadow flex flex-col items-center justify-center min-h-[320px]">
+                <div className="w-8 h-8 border-3 border-[var(--primary)] border-t-transparent rounded-full animate-spin mb-3" />
+                <p className="text-sm font-bold text-[var(--primary-dark)]">
+                  Carregando leitor de estudo...
+                </p>
+              </div>
+            }
+          >
+            <PdfViewer pdfFileName={study.pdfFileName} title={study.title} />
+          </Suspense>
         </div>
 
         {/* 6. Referências bíblicas (SÓ se existirem) */}

@@ -19,7 +19,7 @@ export const STUDIES: Study[] = [
     description: 'Um estudo sobre o significado da blasfêmia contra o Espírito Santo, a diferença entre arrependimento e remorso, e como vencer a incredulidade.',
     pageCount: 16,
     pdfFileName: 'a-blasfemia-contra-o-espirito-santo.pdf',
-    bibleReferences: ['Mateus 12:30-32', 'João 16:7-9', 'Atos 3:19-20', 'Romanos 10:17', 'Gálatas 3:2', 'João 6:37', '1 João 1:9']
+    bibleReferences: ['MT 12 : 30 - 32', 'João 16:7-9', 'Atos 3:19-20', 'Romanos 10:17', 'Gálatas 3:2', 'João 6:37', '1 João 1:9']
   },
   {
     id: 'adoracao-louvor',
@@ -29,7 +29,7 @@ export const STUDIES: Study[] = [
     description: 'Entendendo a diferença entre louvor e adoração, o significado dos termos e a importância de oferecer a Deus uma adoração com o coração.',
     pageCount: 11,
     pdfFileName: 'adoracao-louvor.pdf',
-    bibleReferences: ['João 4:20-24', 'Salmos 150:1-6', 'Mateus 15:8-9']
+    bibleReferences: ['Salmos 150:1-6', 'Mateus 15:8-9']
   },
   {
     id: 'batismos-e-dons-do-espirito-santo',
@@ -49,7 +49,7 @@ export const STUDIES: Study[] = [
     description: 'Uma análise sobre as três camadas do ser humano (corpo, alma e espírito) e como cada uma se relaciona com Deus e com o mundo.',
     pageCount: 13,
     pdfFileName: 'a-tricotomia-humana.pdf',
-    bibleReferences: ['1 Tessalonicenses 5:23', 'Hebreus 4:12', 'Mateus 10:28', 'Mateus 22:37', 'Romanos 8:1', 'Romanos 7:22', 'Gálatas 5:22', 'Gálatas 5:19', '1 João 2:16', '1 Coríntios 15:51-53']
+    bibleReferences: ['1 Tessalonicenses 5:23', 'Hebreus 4:12', 'Mateus 10:28', 'Mateus 22:37', '1 Coríntios 15:51-53']
   },
   {
     id: 'desfazendo-heresias-e-analisando-citacoes',

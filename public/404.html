@@ -4,20 +4,23 @@
     <meta charset="utf-8">
     <title>Correndo para Deus — Redirecionando...</title>
     <script>
-      // Single Page Apps for GitHub Pages
-      // https://github.com/rafgraph/spa-github-pages
-      var pathSegmentsToKeep = 0;
-      var l = window.location;
-      l.replace(
-        l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-        l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-        l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-        (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-        l.hash
+      // Single Page App redirect for GitHub Pages project sites
+      // Adapta acessos diretos de caminhos para rotas com Hash
+      var repoName = 'site-para-jovem-';
+      var path = window.location.pathname;
+      var repoIndex = path.indexOf('/' + repoName);
+      var subPath = repoIndex !== -1 ? path.substring(repoIndex + repoName.length + 1) : path;
+      subPath = subPath.replace(/^\/+/, '');
+
+      var targetBase = repoIndex !== -1 ? '/' + repoName + '/' : '/';
+      var targetHash = subPath ? '#/' + subPath : '#/';
+
+      window.location.replace(
+        window.location.origin + targetBase + targetHash + window.location.search
       );
     </script>
   </head>
   <body>
-    <p>Redirecionando para o estudo...</p>
+    <p>Redirecionando...</p>
   </body>
 </html>

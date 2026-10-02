@@ -1,13 +1,23 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Instagram } from 'lucide-react';
+import { STUDIES } from '../data/studies';
 
 interface FooterProps {
   onNavigate: (tab: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+  // Verifica se existem 2 ou mais categorias reais
+  const hasMultipleCategories = useMemo(() => {
+    const cats = new Set<string>();
+    STUDIES.forEach((s) => {
+      if (s.category && s.category.trim()) cats.add(s.category.trim());
+    });
+    return cats.size >= 2;
+  }, []);
+
   return (
-    <footer className="bg-[#0F2B5B] text-white pt-10 pb-8 border-t border-[#1C3E78] transition-colors mt-auto">
+    <footer className="bg-[#13467B] text-white pt-10 pb-8 border-t border-[#1b5591] transition-colors mt-auto">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         
         {/* Identidade e Navegação Real */}
@@ -20,14 +30,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <span className="text-base font-extrabold tracking-wider uppercase block text-white">
                 CORRENDO PARA DEUS
               </span>
-              <span className="text-xs text-blue-200">
-                Estudos bíblicos para crescer na fé.
+              <span className="text-xs text-blue-100">
+                Estudos para fortalecer a fé e aproximar você de Deus.
               </span>
             </div>
           </div>
 
           {/* Links de navegação oficiais */}
-          <nav className="flex flex-wrap items-center justify-center sm:justify-end gap-5 sm:gap-6 text-xs sm:text-sm text-blue-200" aria-label="Navegação do rodapé">
+          <nav className="flex flex-wrap items-center justify-center sm:justify-end gap-5 sm:gap-6 text-xs sm:text-sm text-blue-100" aria-label="Navegação do rodapé">
             <button
               onClick={() => onNavigate('inicio')}
               className="hover:text-white transition-colors min-h-[36px] flex items-center"
@@ -40,6 +50,14 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             >
               Estudos
             </button>
+            {hasMultipleCategories && (
+              <button
+                onClick={() => onNavigate('categorias')}
+                className="hover:text-white transition-colors min-h-[36px] flex items-center"
+              >
+                Categorias
+              </button>
+            )}
             <button
               onClick={() => onNavigate('sobre')}
               className="hover:text-white transition-colors min-h-[36px] flex items-center"
@@ -57,7 +75,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-white transition-colors min-h-[36px] flex items-center gap-1.5 text-yellow-300 hover:text-yellow-200 font-semibold"
-              title="Instagram Oficial"
+              title="Instagram Oficial @ad_correndoparadeus"
               aria-label="Instagram Oficial @ad_correndoparadeus"
             >
               <Instagram className="w-4 h-4" />

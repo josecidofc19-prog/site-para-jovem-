@@ -7,10 +7,11 @@ import { StudyGrid } from './components/StudyGrid';
 import { StudyDetails } from './components/StudyDetails';
 import { AboutView } from './components/AboutView';
 import { ContactView } from './components/ContactView';
+import { CategoriesView } from './components/CategoriesView';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
-  const [currentTab, setCurrentTab] = useState<'inicio' | 'estudos' | 'estudo' | 'sobre' | 'contato'>('inicio');
+  const [currentTab, setCurrentTab] = useState<'inicio' | 'estudos' | 'estudo' | 'sobre' | 'contato' | 'categorias'>('inicio');
   const [selectedStudyId, setSelectedStudyId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
@@ -57,6 +58,9 @@ export const App: React.FC = () => {
       } else if (hash === 'contato') {
         setSelectedStudyId(null);
         setCurrentTab('contato');
+      } else if (hash === 'categorias') {
+        setSelectedStudyId(null);
+        setCurrentTab('categorias');
       } else if (hash === 'estudos') {
         setSelectedStudyId(null);
         setCurrentTab('estudos');
@@ -71,7 +75,7 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Metadados dinâmicos e SEO por página
+  // Metadados dinâmicos e SEO por página com URL oficial de produção
   useEffect(() => {
     if (currentTab === 'estudo' && currentStudy) {
       document.title = `${currentStudy.title} — Correndo para Deus`;
@@ -90,6 +94,12 @@ export const App: React.FC = () => {
       updateMetaTags(
         'Contato — Correndo para Deus',
         'Entre em contato com o ministério Correndo para Deus. WhatsApp: (19) 98199-8747. Endereço: Rua Orlando Barnabé, 229, Indaiatuba - SP.'
+      );
+    } else if (currentTab === 'categorias') {
+      document.title = 'Categorias de Estudos — Correndo para Deus';
+      updateMetaTags(
+        'Categorias de Estudos — Correndo para Deus',
+        'Explore temas e categorias de estudos bíblicos do ministério Correndo para Deus.'
       );
     } else if (currentTab === 'estudos') {
       document.title = 'Nossos Estudos — Correndo para Deus';
@@ -133,6 +143,10 @@ export const App: React.FC = () => {
       setSelectedStudyId(null);
       setCurrentTab('contato');
       window.location.hash = '#/contato';
+    } else if (tab === 'categorias') {
+      setSelectedStudyId(null);
+      setCurrentTab('categorias');
+      window.location.hash = '#/categorias';
     } else if (tab === 'estudos') {
       setSelectedStudyId(null);
       setCurrentTab('estudos');
@@ -179,6 +193,20 @@ export const App: React.FC = () => {
         {/* PÁGINA CONTATO: Apenas dados oficiais */}
         {currentTab === 'contato' && (
           <ContactView />
+        )}
+
+        {/* PÁGINA CATEGORIAS: Apenas quando há categorias reais */}
+        {currentTab === 'categorias' && (
+          <CategoriesView
+            onSelectCategory={(cat) => {
+              setSelectedCategory(cat);
+              handleNavigate('estudos');
+            }}
+            onExploreStudies={() => {
+              setSelectedCategory('Todos');
+              handleNavigate('estudos');
+            }}
+          />
         )}
 
         {/* PÁGINA INICIAL E LISTA DE ESTUDOS */}

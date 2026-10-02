@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://correndo-para-deus.ai.studio/sitemap.xml
+Sitemap: https://josecidofc19-prog.github.io/site-para-jovem-/sitemap.xml
