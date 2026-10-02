@@ -6,10 +6,11 @@ import { Hero } from './components/Hero';
 import { StudyGrid } from './components/StudyGrid';
 import { StudyDetails } from './components/StudyDetails';
 import { AboutView } from './components/AboutView';
+import { ContactView } from './components/ContactView';
 import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
-  const [currentTab, setCurrentTab] = useState<'inicio' | 'estudos' | 'estudo' | 'sobre'>('inicio');
+  const [currentTab, setCurrentTab] = useState<'inicio' | 'estudos' | 'estudo' | 'sobre' | 'contato'>('inicio');
   const [selectedStudyId, setSelectedStudyId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('Todos');
@@ -50,9 +51,12 @@ export const App: React.FC = () => {
         }
       }
 
-      if (hash === 'sobre') {
+      if (hash === 'sobre' || hash === 'nossa-historia') {
         setSelectedStudyId(null);
         setCurrentTab('sobre');
+      } else if (hash === 'contato') {
+        setSelectedStudyId(null);
+        setCurrentTab('contato');
       } else if (hash === 'estudos') {
         setSelectedStudyId(null);
         setCurrentTab('estudos');
@@ -67,7 +71,7 @@ export const App: React.FC = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  // Metadados dinâmicos e SEO por estudo
+  // Metadados dinâmicos e SEO por página
   useEffect(() => {
     if (currentTab === 'estudo' && currentStudy) {
       document.title = `${currentStudy.title} — Correndo para Deus`;
@@ -76,10 +80,16 @@ export const App: React.FC = () => {
         currentStudy.description || `Estudo bíblico: ${currentStudy.title}. Autor: ${currentStudy.author}.`
       );
     } else if (currentTab === 'sobre') {
-      document.title = 'Sobre o Ministério — Correndo para Deus';
+      document.title = 'Nossa História — Correndo para Deus';
       updateMetaTags(
-        'Sobre o Ministério — Correndo para Deus',
+        'Nossa História — Correndo para Deus',
         'O Correndo para Deus é um ministério dedicado a ajudar pessoas, especialmente jovens, a conhecer mais a Palavra de Deus e crescer na fé por meio de estudos e conteúdos bíblicos.'
+      );
+    } else if (currentTab === 'contato') {
+      document.title = 'Contato — Correndo para Deus';
+      updateMetaTags(
+        'Contato — Correndo para Deus',
+        'Entre em contato com o ministério Correndo para Deus. WhatsApp: (19) 98199-8747. Endereço: Rua Orlando Barnabé, 229, Indaiatuba - SP.'
       );
     } else if (currentTab === 'estudos') {
       document.title = 'Nossos Estudos — Correndo para Deus';
@@ -118,7 +128,11 @@ export const App: React.FC = () => {
     } else if (tab === 'sobre') {
       setSelectedStudyId(null);
       setCurrentTab('sobre');
-      window.location.hash = '#/sobre';
+      window.location.hash = '#/nossa-historia';
+    } else if (tab === 'contato') {
+      setSelectedStudyId(null);
+      setCurrentTab('contato');
+      window.location.hash = '#/contato';
     } else if (tab === 'estudos') {
       setSelectedStudyId(null);
       setCurrentTab('estudos');
@@ -155,11 +169,16 @@ export const App: React.FC = () => {
           />
         )}
 
-        {/* PÁGINA SOBRE: Apenas texto oficial */}
+        {/* PÁGINA NOSSA HISTÓRIA: Apenas texto oficial */}
         {currentTab === 'sobre' && (
           <AboutView
             onExploreStudies={() => handleNavigate('estudos')}
           />
+        )}
+
+        {/* PÁGINA CONTATO: Apenas dados oficiais */}
+        {currentTab === 'contato' && (
+          <ContactView />
         )}
 
         {/* PÁGINA INICIAL E LISTA DE ESTUDOS */}

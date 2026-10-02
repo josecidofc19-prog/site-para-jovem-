@@ -9,11 +9,12 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Somente as páginas com conteúdo real oficial fornecido
+  // Menu oficial completo restaurado
   const navLinks = [
     { id: 'inicio', label: 'Início' },
     { id: 'estudos', label: 'Estudos' },
-    { id: 'sobre', label: 'Sobre' },
+    { id: 'sobre', label: 'Nossa História' },
+    { id: 'contato', label: 'Contato' },
   ];
 
   const handleLinkClick = (tabId: string) => {
@@ -48,7 +49,11 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
         <div className="hidden md:flex items-center gap-7">
           <nav className="flex items-center gap-6" aria-label="Navegação principal">
             {navLinks.map((link) => {
-              const isActive = currentTab === link.id || (link.id === 'estudos' && currentTab === 'estudo');
+              const isActive = 
+                currentTab === link.id || 
+                (link.id === 'estudos' && currentTab === 'estudo') ||
+                (link.id === 'sobre' && currentTab === 'nossa-historia');
+
               return (
                 <button
                   key={link.id}
@@ -99,7 +104,11 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onNavigate }) => {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-[var(--border)] bg-[var(--bg-page)] px-4 pt-3 pb-5 space-y-2 shadow-md">
           {navLinks.map((link) => {
-            const isActive = currentTab === link.id || (link.id === 'estudos' && currentTab === 'estudo');
+            const isActive = 
+              currentTab === link.id || 
+              (link.id === 'estudos' && currentTab === 'estudo') ||
+              (link.id === 'sobre' && currentTab === 'nossa-historia');
+
             return (
               <button
                 key={link.id}

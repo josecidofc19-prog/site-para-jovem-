@@ -1,4 +1,5 @@
 import React from 'react';
+import { Instagram } from 'lucide-react';
 
 interface FooterProps {
   onNavigate: (tab: string) => void;
@@ -12,7 +13,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         {/* Identidade e Navegação Real */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-8 border-b border-white/10">
           <div className="flex items-center gap-3 text-center sm:text-left">
-            <div className="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center font-bold text-base shrink-0">
+            <div className="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center font-bold text-base shrink-0 select-none">
               ✝
             </div>
             <div>
@@ -26,7 +27,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
 
           {/* Links de navegação oficiais */}
-          <nav className="flex items-center gap-6 text-xs sm:text-sm text-blue-200" aria-label="Navegação do rodapé">
+          <nav className="flex flex-wrap items-center justify-center sm:justify-end gap-5 sm:gap-6 text-xs sm:text-sm text-blue-200" aria-label="Navegação do rodapé">
             <button
               onClick={() => onNavigate('inicio')}
               className="hover:text-white transition-colors min-h-[36px] flex items-center"
@@ -43,8 +44,25 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               onClick={() => onNavigate('sobre')}
               className="hover:text-white transition-colors min-h-[36px] flex items-center"
             >
-              Sobre
+              Nossa História
             </button>
+            <button
+              onClick={() => onNavigate('contato')}
+              className="hover:text-white transition-colors min-h-[36px] flex items-center"
+            >
+              Contato
+            </button>
+            <a
+              href="https://www.instagram.com/ad_correndoparadeus/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors min-h-[36px] flex items-center gap-1.5 text-yellow-300 hover:text-yellow-200 font-semibold"
+              title="Instagram Oficial"
+              aria-label="Instagram Oficial @ad_correndoparadeus"
+            >
+              <Instagram className="w-4 h-4" />
+              <span>Instagram</span>
+            </a>
           </nav>
         </div>
 
